@@ -1,0 +1,12 @@
+# Ignora i file temporanei di Python (spazzatura)
+__pycache__/
+*.pyc
+
+# Ignora i file di sistema (Mac/Windows)
+.DS_Store
+Thumbs.db
+
+# Ignora la cartella dell'ambiente virtuale (se la usi)
+venv/
+env/
+.env
