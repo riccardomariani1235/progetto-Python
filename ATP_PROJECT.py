@@ -127,7 +127,7 @@ def analizza_head_to_head(df_partite: pd.DataFrame, giocatore1: str, giocatore2:
 
 
 def calcola_statistiche_carriera(df_partite: pd.DataFrame) -> pd.DataFrame:
-    # 1. Statistiche base
+    # Statistiche base
     stats_w = df_partite.groupby('winner_name').agg({
         'winner_id': 'count',
         'w_ace': 'sum'
@@ -138,19 +138,18 @@ def calcola_statistiche_carriera(df_partite: pd.DataFrame) -> pd.DataFrame:
         'l_ace': 'sum'
     }).rename(columns={'loser_id': 'sconfitte', 'l_ace': 'ace_sconfitte'})
     
-    # 2. Calcolo Titoli (Finali vinte)
+    # Calcolo Titoli (Finali vinte)
     finali_vinte = df_partite[df_partite['round'] == 'F']['winner_name'].value_counts()
     finali_vinte.name = 'titoli'
     
-    # 3. NUOVO: Calcolo Vittorie contro Top 10
-    # Filtriamo le partite dove il perdente aveva rank <= 10
+    # Calcolo Vittorie contro Top 10
     vittorie_top10 = df_partite[df_partite['loser_rank_new'] <= 10]['winner_name'].value_counts()
     vittorie_top10.name = 'top10_wins'
     
     # 4. Merge di tutto
     stats_totali = stats_w.join(stats_l, how='outer').fillna(0)
     stats_totali = stats_totali.join(finali_vinte, how='left').fillna(0)
-    stats_totali = stats_totali.join(vittorie_top10, how='left').fillna(0) # Aggiungiamo le top10 wins
+    stats_totali = stats_totali.join(vittorie_top10, how='left').fillna(0) 
     
     # 5. Calcoli finali
     stats_totali['totale_partite'] = stats_totali['vittorie'] + stats_totali['sconfitte']
